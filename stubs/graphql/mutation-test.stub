@@ -1,0 +1,52 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use {{ mutationNamespace }};
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Testing\TestResponse;
+use Tests\TestCase;
+
+class {{ class }} extends TestCase
+{
+    use DatabaseTransactions;
+
+    public const MUTATION = {{ mutation }}::NAME;
+
+    public function test_do_success(): void
+    {
+
+    }
+
+    public function test_not_permitted_user_get_no_permission_error(): void
+    {
+
+    }
+
+    public function test_guest_get_unauthorized_error(): void
+    {
+
+    }
+
+    public function test_other_company_user_get_validation_error(): void
+    {
+
+    }
+
+    protected function mutation(string $args): TestResponse
+    {
+        $query = sprintf(
+            'mutation {
+                %s %s {
+                    id
+                }
+            }',
+            self::MUTATION,
+            $args
+        );
+
+        return $this->postGraphQL(compact('query'));
+    }
+}

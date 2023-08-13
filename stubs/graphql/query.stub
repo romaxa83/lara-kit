@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use Core\GraphQL\Queries\GenericQuery;
+use App\GraphQL\Types\BaseType;
+use App\Models\BaseModel;
+use {{ namespacedType }};
+use {{ namespacedModel }};
+use {{ namespacedPermission }};
+
+class {{ class }} extends GenericQuery
+{
+    public const NAME = '{{ name }}';
+    public const PERMISSION = {{ permission }}::KEY;
+
+    protected BaseModel|string $model = {{ model }}::class;
+    protected BaseType|string $type = {{ type }}::class;
+}

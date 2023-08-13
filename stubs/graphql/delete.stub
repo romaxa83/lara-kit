@@ -1,0 +1,86 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use App\Entities\Messages\ResponseMessageEntity;
+use App\GraphQL\Types\Messages\ResponseMessageType;
+use App\GraphQL\Types\NonNullType;
+use {{ ruleNamespace }};
+use Core\GraphQL\Mutations\BaseMutation;
+use {{ serviceNamespace }};
+use {{ permissionNamespace }};
+use {{ modelNamespace }};
+use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\Type;
+use Illuminate\Database\Eloquent\Collection;
+use Rebing\GraphQL\Support\SelectFields;
+use Throwable;
+
+class {{ class }} extends BaseMutation
+{
+    public const NAME = '{{ name }}';
+    public const PERMISSION = {{ permission }}::KEY;
+
+    public function __construct(private {{ service }} $service)
+    {
+    }
+
+    public function type(): Type
+    {
+        return ResponseMessageType::nonNullType();
+    }
+
+    public function args(): array
+    {
+        return [
+            'ids' => NonNullType::listOf(
+                NonNullType::id()
+            ),
+        ];
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function doResolve(
+        mixed $root,
+        array $args,
+        mixed $context,
+        ResolveInfo $info,
+        SelectFields $fields
+    ): ResponseMessageEntity {
+        ${{ variables }} = {{ model }}::query()
+            ->whereCompany($this->company())
+            ->whereKey($args['ids'])
+            ->get();
+
+        $this->check(${{ variables }});
+
+        makeTransaction(fn() => $this->service->delete(${{ variables }}));
+
+        $message = ${{ variables }}->containsOneItem()
+            ? __('')
+            : __('');
+
+        return ResponseMessageEntity::success($message);
+    }
+
+    /**
+     * @param Collection|{{ model }}[] ${{ variables }}
+     */
+    private function check(Collection|array ${{ variables }}): void
+    {
+    }
+
+    protected function rules(array $args = []): array
+    {
+        return $this->returnEmptyIfGuest(
+            fn() => [
+                'ids' => ['required', 'array', new {{ rule }}($this->manager())],
+                'ids.*' => ['required', 'integer'],
+            ]
+        );
+    }
+}

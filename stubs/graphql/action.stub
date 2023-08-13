@@ -1,0 +1,56 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use Core\GraphQL\Mutations\BaseMutation;
+use {{ serviceNamespace }};
+use {{ permissionNamespace }};
+use {{ typeNamespace }};
+use {{ dtoNamespace }};
+use {{ modelNamespace }};
+use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\SelectFields;
+
+class {{ class }} extends BaseMutation
+{
+    public const NAME = '{{ name }}';
+    public const PERMISSION = {{ permission }}::KEY;
+
+    public function __construct(private {{ service }} $service)
+    {
+    }
+
+    public function type(): Type
+    {
+        return {{ type }}::nonNullType();
+    }
+
+    public function args(): array
+    {
+        return [
+            'input' => {{ dto }}::nonNullType(),
+        ];
+    }
+
+    public function doResolve(
+        mixed $root,
+        array $args,
+        mixed $context,
+        ResolveInfo $info,
+        SelectFields $fields
+    ): {{ model }} {
+        return new {{ model }}();
+    }
+
+    protected function rules(array $args = []): array
+    {
+        return $this->returnEmptyIfGuest(
+            fn() => [
+                'input' => ['required', 'array'],
+            ]
+        );
+    }
+}

@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use App\Filters\BaseModelFilter;
+use {{ modelNamespace }};
+use App\Traits\Filter\ActiveFilterTrait;
+use App\Traits\Filter\BelongsToCompanyFilterTrait;
+use App\Traits\Filter\SortFilterTrait;
+
+/**
+ * @mixin {{ model }}
+ */
+class {{ class }} extends BaseModelFilter
+{
+    use ActiveFilterTrait;
+    use SortFilterTrait;
+    use BelongsToCompanyFilterTrait;
+
+    public const TABLE = {{ model }}::TABLE;
+}

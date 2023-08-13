@@ -1,0 +1,19 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\GraphQL\Types\BaseInputType;
+use App\GraphQL\Types\NonNullType;
+use GraphQL\Type\Definition\Type;
+
+class {{ class }} extends BaseInputType
+{
+    public const NAME = '{{ name }}';
+
+    public function fields(): array
+    {
+        return [
+
+        ];
+    }
+}

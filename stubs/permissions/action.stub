@@ -1,0 +1,20 @@
+<?php
+
+namespace {{ namespace }};
+
+use Core\Permissions\BasePermission;
+
+class {{ className }} extends BasePermission
+{
+    public const KEY = {{ groupClassName }}::KEY . '.{{ action }}';
+
+    public function getName(): string
+    {
+        return __('permissions.{{ nameKey }}.grants.{{ action }}');
+    }
+
+    public function getPosition(): int
+    {
+        return 1;
+    }
+}

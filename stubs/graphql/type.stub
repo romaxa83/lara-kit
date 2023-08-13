@@ -1,0 +1,24 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\GraphQL\Types\BaseType;
+use App\GraphQL\Types\NonNullType;
+use {{ modelNamespace }};
+use GraphQL\Type\Definition\Type;
+
+class {{ class }} extends BaseType
+{
+    public const NAME = '{{ name }}';
+    public const MODEL = {{ model }}::class;
+
+    public function fields(): array
+    {
+        return array_merge(
+            parent::fields(),
+            [
+
+            ]
+        );
+    }
+}

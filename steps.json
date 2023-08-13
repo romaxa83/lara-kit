@@ -1,0 +1,30 @@
+{
+    "steps": [
+    ],
+    "master": [
+        "git checkout HEAD -- composer.lock",
+        "git pull origin master",
+        "composer install",
+        "php artisan optimize:clear",
+        "php artisan opcache:clear",
+        "php artisan migrate --force",
+        "php artisan cache:clear",
+        "php artisan optimize",
+        "php artisan opcache:compile --force",
+        "php artisan queue:restart",
+        "php artisan octane:stop"
+    ],
+    "develop": [
+        "git checkout HEAD -- composer.lock",
+        "git pull origin develop",
+        "composer install",
+        "php artisan optimize:clear",
+        "php artisan opcache:clear",
+        "php artisan migrate",
+        "php artisan cache:clear",
+        "php artisan optimize",
+        "php artisan opcache:compile --force",
+        "php artisan queue:restart",
+        "php artisan octane:stop"
+    ]
+}

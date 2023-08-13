@@ -1,0 +1,32 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ filterNamespace }};
+use App\Models\BaseModel;
+use App\Traits\Filterable;
+use App\Traits\HasFactory;
+use App\Traits\Model\BelongsToCompanyTrait;
+use {{ factoryNamespace }};
+
+/**
+ * @property int id
+ * @property int company_id
+ *
+ * @method static {{ factory }} factory(...$options)
+ */
+class {{ class }} extends BaseModel
+{
+    use BelongsToCompanyTrait;
+    use Filterable;
+    use HasFactory;
+
+    public const TABLE = '{{ table }}';
+
+    protected $table = self::TABLE;
+
+    public function modelFilter(): string
+    {
+        return {{ filter }}::class;
+    }
+}

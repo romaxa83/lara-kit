@@ -1,0 +1,18 @@
+@startuml
+    class Company {
+        int id
+    }
+
+    class CompanyUser {
+        int company_id
+        int user_id
+        string state
+    }
+
+    class User {
+        int id
+    }
+
+    Company <-- CompanyUser
+    User <-- CompanyUser
+@enduml

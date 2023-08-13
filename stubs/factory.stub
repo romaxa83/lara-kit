@@ -1,0 +1,22 @@
+<?php
+
+namespace {{ factoryNamespace }};
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Collection;
+use {{ namespacedModel }};
+
+/**
+ * @method Collection|{{ model }}[]|{{ model }} create(array $attributes = [])
+ */
+class {{ factory }}Factory extends Factory
+{
+    protected $model = {{ model }}::class;
+
+    public function definition(): array
+    {
+        return [
+            //
+        ];
+    }
+}

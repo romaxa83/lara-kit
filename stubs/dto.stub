@@ -1,0 +1,17 @@
+<?php
+
+namespace {{ namespace }};
+
+use Core\Dto\BaseGraphQLDto;
+use Core\GraphQL\Helpers\GraphQLTypeName;
+
+#[GraphQLTypeName('{{ inputName }}')]
+class {{ class }} extends BaseGraphQLDto
+{
+    public static function build(array $args): static
+    {
+        $self = new self();
+
+        return $self;
+    }
+}

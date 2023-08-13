@@ -1,0 +1,164 @@
+#!/usr/bin/env bash
+
+source .env 2> /dev/null
+
+TERM=xterm-256color
+
+COMMAND=$1
+arg1=$1
+arg2=$2
+args="${*:2}"
+
+dc="docker-compose -p ${APP_NAME} ${args}"
+dcc="docker-compose -p ${APP_NAME}"
+
+php="php"
+db="db"
+db_testing="db_testing"
+db_asterisk_cfg="db_asterisk_cfg"
+db_kamailio="db_kamailio"
+db_radius="db_radius"
+cache="cache"
+
+ADDRESS=${DOCKER_ADDRESS} || 'localhost'
+MESSAGE="http://${ADDRESS}"
+
+case ${COMMAND} in
+  init)
+    echo "Choose your OS:"
+    select name in "win" "linux" "macos" ;
+    do
+      case ${name} in
+        win|macos)
+          cp -n ./docker/docker-compose.example.yml docker-compose.yml
+          cp -n ./docker/conf/git/pre-commit.stub .git/hooks/pre-commit
+
+        ;;
+
+        linux)
+          cp -n ./docker/docker-compose.example.yml docker-compose.yml
+          #cp -n ./docker/conf/git/pre-commit.stub .git/hooks/pre-commit
+
+        ;;
+
+      esac
+    break
+    done
+    cp -n .env.example .env
+    cp -n .env.testing.example .env.testing
+    echo "Configuration done."
+  ;;
+  build)
+    sudo chmod 777 -R .
+    ${dc} up --build --force-recreate
+
+  ;;
+  rebuild)
+    sudo chmod 777 -R .
+    ${dc} up -d --build --force-recreate --no-deps ${arg2}
+
+  ;;
+  start)
+    ${dc} start
+    echo ${MESSAGE}
+
+  ;;
+  stop)
+    ${dc} stop
+
+  ;;
+  down)
+    ${dc} down
+
+  ;;
+  logs)
+    ${dc} logs -f
+
+  ;;
+  ps)
+    ${dc} ps
+
+  ;;
+  restart)
+    ${dc} restart
+    echo ${MESSAGE}
+
+  ;;
+  php)
+    ${dc} exec ${php} bash
+
+  ;;
+  artisan)
+    ${dcc} exec ${php} php artisan ${args}
+    ${dcc} exec ${php} chmod -R 0777 .
+
+  ;;
+
+  phpcs)
+    ${dcc} exec ${php} ./vendor/bin/phpcs ${args}
+    ${dcc} exec ${php} chmod -R 0777 .
+
+  ;;
+  composer)
+    ${dcc} exec ${php} composer ${args}
+    ${dcc} exec ${php} chmod -R 0777 .
+
+  ;;
+  db)
+    ${dc} exec ${db} bash
+
+  ;;
+  db_testing)
+    ${dc} exec ${db_testing} bash
+
+  ;;
+  cache)
+    ${dc} exec ${cache} bash
+
+  ;;
+  ws)
+    ${dc} exec ${php} php artisan websockets:serve
+
+    echo "Stop websocket serv"
+
+  ;;
+  wlog)
+    > storage/logs/laravel.log
+    tail -f storage/logs/laravel.log
+
+  ;;
+  test-build)
+    ${dc} up -d --build --force-recreate
+
+  ;;
+  test-rebuild)
+    ${dc} up -d --build --force-recreate --no-deps ${arg2}
+
+  ;;
+  test-run)
+    ${dc} exec -T ${php} php artisan test --no-interaction --testdox --do-not-cache-result
+
+  ;;
+  help|--help|'')
+    echo "Usage:
+
+    init      : Init docker configuration.
+    build     : Building containers.
+    start     : To start containers.
+    stop      : To stop containers.
+    down      : Destroy containers.
+    restart   : Destroy containers.
+    logs      : Show logs from containers.
+    ps        : Show status for containers.
+    db        : Go to inside db container.
+    db_testing: Go to inside db_testing container.
+    node      : Go to inside node container.
+    cache     : Go to inside cache container.
+    ws        : Start websocket server.
+    wlog      : clean and watch laravel.log.
+    test-run  : Run the unit tests.
+    help      : See this help.
+    "
+
+  ;;
+esac

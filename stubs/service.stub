@@ -1,0 +1,49 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use {{ dtoNamespace }};
+use App\Models\Users\User;
+use {{ modelNamespace }};
+
+class {{ class }}
+{
+    public function create(User $creator, {{ dto }} $dto): {{ model }}
+    {
+        ${{ variable }} = new {{ model }}();
+        ${{ variable }}->setCompany($creator->company);
+
+        return $this->store(${{ variable }}, $dto);
+    }
+
+    protected function store({{ model }} ${{ variable }}, {{ dto }} $dto): {{ model }}
+    {
+        $this->fill($dto, ${{ variable }});
+
+        ${{ variable }}->save();
+
+        return ${{ variable }};
+    }
+
+    protected function fill({{ dto }} $dto, {{ model }} ${{ variable }}): void
+    {
+
+    }
+
+    public function update({{ model }} ${{ variable }}, {{ dto }} $dto): {{ model }}
+    {
+        return $this->store(${{ variable }}, $dto);
+    }
+
+    /**
+     * @param {{ model }}[] ${{ variables }}
+     */
+    public function delete(iterable ${{ variables }}): void
+    {
+        foreach (${{ variables }} as ${{ variable }}) {
+            ${{ variable }}->delete();
+        }
+    }
+}

@@ -1,0 +1,52 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use {{ queryNamespace }};
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Testing\TestResponse;
+use Tests\TestCase;
+
+class {{ class }} extends TestCase
+{
+    use DatabaseTransactions;
+
+    public const QUERY = {{ query }}::NAME;
+
+    public function test_get_list_success(): void
+    {
+
+    }
+
+    public function test_not_permitted_user_get_no_permission_error(): void
+    {
+
+    }
+
+    public function test_guest_get_unauthorized_error(): void
+    {
+
+    }
+
+    public function test_other_company_user_get_validation_error(): void
+    {
+
+    }
+
+    protected function query(string $args): TestResponse
+    {
+        $query = sprintf(
+            'query {
+                %s %s {
+                    id
+                }
+            }',
+            self::QUERY,
+            $args
+        );
+
+        return $this->postGraphQL(compact('query'));
+    }
+}

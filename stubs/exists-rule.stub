@@ -1,0 +1,12 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Models\BaseModel;
+use {{ modelNamespace }};
+use App\Rules\BaseBelongsToSameCompanyRule;
+
+class {{ class }} extends BaseBelongsToSameCompanyRule
+{
+    protected string|BaseModel $model = {{ model }}::class;
+}

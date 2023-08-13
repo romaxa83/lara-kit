@@ -1,0 +1,20 @@
+<?php
+
+namespace {{ namespace }};
+
+use Core\Permissions\BasePermissionGroup;
+
+class {{ className }} extends BasePermissionGroup
+{
+    public const KEY = '{{ nameKey }}';
+
+    public function getName(): string
+    {
+        return __('permissions.{{ nameKey }}.group');
+    }
+
+    public function getPosition(): int
+    {
+        return 1000;
+    }
+}
