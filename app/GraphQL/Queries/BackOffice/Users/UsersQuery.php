@@ -3,7 +3,6 @@
 namespace App\GraphQL\Queries\BackOffice\Users;
 
 use App\GraphQL\Types\Users\UserType;
-use App\Modules\Admin\Models\Admin;
 use App\Modules\User\Models\User;
 use App\Modules\User\Repositories\UserRepository;
 use App\Permissions\Users\UserListPermission;
@@ -28,11 +27,13 @@ class UsersQuery extends BaseQuery
         return array_merge(
             $this->paginationArgs(),
             $this->sortArgs(),
+            $this->trashedArgs(),
             [
                 'id' => Type::id(),
                 'ids' => Type::listOf(Type::id()),
                 'query' => Type::string(),
                 'phone' => Type::string(),
+                'wit' => Type::string(),
             ]
         );
     }
@@ -50,6 +51,7 @@ class UsersQuery extends BaseQuery
         SelectFields $fields)
     : LengthAwarePaginator
     {
+//        dd($args);
         return $this->repo->getPagination(
             $fields->getSelect() ?: ['id'],
             $fields->getRelations(),
@@ -62,6 +64,7 @@ class UsersQuery extends BaseQuery
         return array_merge(
             $this->paginationRules(),
             $this->sortRules(),
+            $this->trashedRules(),
             [
                 'id' => ['nullable', 'int'],
                 'ids' => ['nullable', 'array'],

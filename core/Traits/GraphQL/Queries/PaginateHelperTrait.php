@@ -2,6 +2,7 @@
 
 namespace Core\Traits\GraphQL\Queries;
 
+use Core\Models\BaseModel;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +18,7 @@ trait PaginateHelperTrait
         return [
             'per_page' => [
                 'type' => Type::int(),
-                'description' => 'Maximum value ' . config('queries.default.pagination.max_per_page')
+                'description' => 'Maximum value ' . BaseModel::DEFAULT_PER_PAGE
             ],
             'page' => [
                 'type' => Type::int(),

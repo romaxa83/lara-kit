@@ -1,7 +1,6 @@
 <?php
 
-
-namespace App\Traits\Filter;
+namespace Core\Traits\Filters;
 
 use Exception;
 use Illuminate\Database\Query\Builder;

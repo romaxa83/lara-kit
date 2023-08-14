@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\Filter;
+namespace Core\Traits\Filters;
 
 trait IdFilterTrait
 {

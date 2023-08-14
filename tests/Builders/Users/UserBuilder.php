@@ -45,6 +45,12 @@ class UserBuilder extends BaseBuilder
         return $this;
     }
 
+    public function trashed(): self
+    {
+        $this->data['deleted_at'] = CarbonImmutable::now();
+        return $this;
+    }
+
     public function email(?string $value = null, bool $verify = false): self
     {
         if(!$value){

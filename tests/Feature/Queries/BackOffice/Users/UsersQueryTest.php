@@ -43,6 +43,7 @@ class UsersQueryTest extends TestCase
         $m_1 = $this->userBuilder->create();
         $m_2 = $this->userBuilder->create();
         $m_3 = $this->userBuilder->create();
+        $this->userBuilder->trashed()->create();
 
         $this->postGraphQLBackOffice([
             'query' => $this->getQueryStr()
@@ -203,6 +204,93 @@ class UsersQueryTest extends TestCase
             }',
             self::QUERY,
             $perPage
+        );
+    }
+
+    /** @test */
+    public function success_with_trashed(): void
+    {
+        $this->loginAsSuperAdmin();
+
+        $this->userBuilder->create();
+        $this->userBuilder->create();
+        $this->userBuilder->trashed()->create();
+
+        $this->postGraphQLBackOffice([
+            'query' => $this->getQueryStrWithTrashed()
+        ])
+            ->assertJson([
+                'data' => [
+                    self::QUERY => [
+                        'meta' => [
+                            'total' => 3,
+                        ],
+                    ]
+                ]
+            ])
+        ;
+    }
+
+    protected function getQueryStrWithTrashed(): string
+    {
+        return sprintf(
+            '
+            {
+                %s (with_trash: true) {
+                    data {
+                        id
+                    }
+                    meta {
+                        total
+                    }
+                }
+            }',
+            self::QUERY,
+        );
+    }
+
+    /** @test */
+    public function success_only_trashed(): void
+    {
+        $this->loginAsSuperAdmin();
+
+        $this->userBuilder->create();
+        $this->userBuilder->create();
+        $model = $this->userBuilder->trashed()->create();
+
+        $this->postGraphQLBackOffice([
+            'query' => $this->getQueryStrOnlyTrashed()
+        ])
+            ->assertJson([
+                'data' => [
+                    self::QUERY => [
+                        'data' => [
+                            ['id' => $model->id]
+                        ],
+                        'meta' => [
+                            'total' => 1,
+                        ],
+                    ]
+                ]
+            ])
+        ;
+    }
+
+    protected function getQueryStrOnlyTrashed(): string
+    {
+        return sprintf(
+            '
+            {
+                %s (only_trash: true) {
+                    data {
+                        id
+                    }
+                    meta {
+                        total
+                    }
+                }
+            }',
+            self::QUERY,
         );
     }
 

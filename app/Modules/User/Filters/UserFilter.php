@@ -5,11 +5,13 @@ namespace App\Modules\User\Filters;
 use App\Modules\User\Models\User;
 use App\Modules\Utils\Phones\Traits\FilterPhone;
 use Core\Filters\BaseModelFilter;
+use Core\Traits\Filters\TrashedFilter;
 use Illuminate\Database\Eloquent\Builder;
 
 class UserFilter extends BaseModelFilter
 {
     use FilterPhone;
+    use TrashedFilter;
 
     public function query(string $query): void
     {

@@ -3,8 +3,8 @@
 namespace App\Filters\Localization;
 
 use App\Models\Localization\Locale;
-use App\Traits\Filter\IdFilterTrait;
-use App\Traits\Filter\SortFilterTrait;
+use Core\Traits\Filters\IdFilterTrait;
+use Core\Traits\Filters\SortFilterTrait;
 use EloquentFilter\ModelFilter;
 
 class LocaleFilter extends ModelFilter

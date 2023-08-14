@@ -11,6 +11,7 @@ use Core\Traits\GraphQL\BaseAttributesTrait;
 use Core\Traits\GraphQL\Queries\BetweenDateRangeTrait;
 use Core\Traits\GraphQL\Queries\PaginateHelperTrait;
 use Core\Traits\GraphQL\Queries\SortHelperTrait;
+use Core\Traits\GraphQL\Queries\TrashedHelper;
 use Core\Traits\GraphQL\ThrowableResolverTrait;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
@@ -27,6 +28,7 @@ abstract class BaseQuery extends Query
     use SortHelperTrait;
     use BetweenDateRangeTrait;
     use ThrowableResolverTrait;
+    use TrashedHelper;
 
     public const NAME = '';
     public const DESCRIPTION = null;

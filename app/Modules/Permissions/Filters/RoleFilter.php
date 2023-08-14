@@ -3,8 +3,8 @@
 namespace App\Modules\Permissions\Filters;
 
 use App\Modules\Permissions\Models\Role;
-use App\Traits\Filter\IdFilterTrait;
-use App\Traits\Filter\SortFilterTrait;
+use Core\Traits\Filters\IdFilterTrait;
+use Core\Traits\Filters\SortFilterTrait;
 use EloquentFilter\ModelFilter;
 use Illuminate\Database\Eloquent\Builder;
 

@@ -37,6 +37,7 @@ return [
                     App\Permissions\Users\UserCreatePermission::class,
                     App\Permissions\Users\UserUpdatePermission::class,
                     App\Permissions\Users\UserDeletePermission::class,
+                    App\Permissions\Users\UserRestorePermission::class,
                 ],
             ],
         ],

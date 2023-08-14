@@ -2,7 +2,7 @@
 
 namespace App\Filters\Localization;
 
-use App\Traits\Filter\SortFilterTrait;
+use Core\Traits\Filters\SortFilterTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 

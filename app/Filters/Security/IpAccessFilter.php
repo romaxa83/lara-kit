@@ -3,8 +3,8 @@
 namespace App\Filters\Security;
 
 use App\Models\Security\IpAccess;
-use App\Traits\Filter\SortFilterTrait;
 use Core\Filters\BaseModelFilter;
+use Core\Traits\Filters\SortFilterTrait;
 
 /**
  * @mixin IpAccess

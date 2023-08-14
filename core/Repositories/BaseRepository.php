@@ -45,11 +45,13 @@ abstract class BaseRepository
         $withException = false,
         $exceptionMessage = 'Model not found',
         $withoutId = null,
+        bool $withTrashed = false
     ): null|BaseModel|Model
     {
         $result = $this->eloquentBuilder()
             ->with($relations)
             ->when($withoutId, fn(Builder $b): Builder => $b->whereNot('id', $withoutId))
+            ->when($withTrashed, fn(Builder $b): Builder => $b->withTrashed())
             ->where($field, $value)
             ->first()
         ;
@@ -156,10 +158,13 @@ abstract class BaseRepository
     public function getAllByFields(
         array $payload = [],
         array $relation = [],
+        bool $withTrashed = false
     ): Collection
     {
         $query = $this->eloquentBuilder()
-            ->with($relation);
+            ->with($relation)
+            ->when($withTrashed, fn(Builder $b): Builder => $b->withTrashed())
+        ;
 
         foreach ($payload as $field => $value) {
             if(is_array($value)){

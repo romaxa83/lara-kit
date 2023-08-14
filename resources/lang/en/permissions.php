@@ -4,6 +4,7 @@ $list = 'List';
 $create = 'Create';
 $update = 'Update';
 $delete = 'Delete';
+$restore = 'Restore';
 
 $baseGrants = [
     'list' => $list,
@@ -19,7 +20,9 @@ return [
     ],
     'user' => [
         'group' => 'Users',
-        'grants' => $baseGrants,
+        'grants' => $baseGrants + [
+            'restore' => $restore
+            ],
     ],
     'role' => [
         'group' => 'Roles',
