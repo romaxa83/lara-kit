@@ -4,11 +4,14 @@ namespace Tests\Unit\Modules\Admin\Actions;
 
 use App\Modules\Admin\Actions\AdminCreateAction;
 use App\Modules\Admin\Dto\AdminDto;
+use App\Modules\Admin\Events\AdminCreatedEvent;
+use App\Modules\Admin\Listeners\SendAdminCredentialsListener;
 use App\Modules\Admin\Models\Admin;
 use App\Modules\Permissions\Models\Role;
 use App\Modules\Utils\Phones\Models\Phone;
 use App\Modules\Utils\Phones\ValueObject\Phone as PhoneObj;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Lang;
 use Tests\Builders\Localization\LanguageBuilder;
 use Tests\Builders\Permissions\PermissionBuilder;
@@ -44,6 +47,8 @@ class AdminCreateActionTest extends TestCase
     /** @test */
     public function success_create()
     {
+        Event::fake([AdminCreatedEvent::class]);
+
         $lang_1 = $this->langBuilder->default()->active()->create();
         $lang_2 = $this->langBuilder->active()->create();
         Lang::setLocale($lang_1->slug);
@@ -82,6 +87,12 @@ class AdminCreateActionTest extends TestCase
         $this->assertEquals($model->role->id, $role->id);
 
         $this->assertCount(2, $model->role->permissions);
+
+        Event::assertDispatched(fn (AdminCreatedEvent $event) =>
+            $event->getModel()->id === $model->id
+            && $event->getDto()->password === data_get($this->data, 'password')
+        );
+        Event::assertListening(AdminCreatedEvent::class, SendAdminCredentialsListener::class);
     }
 
     /** @test */

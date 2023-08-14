@@ -13,6 +13,16 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use JetBrains\PhpStorm\Pure;
 
+if (!function_exists('logger_info')) {
+
+    function logger_info($message, array $context = [], bool $important = true)
+    {
+        if(config('logging.channels.eyes.enable') || $important){
+            Illuminate\Support\Facades\Log::channel('eyes')->info($message, $context);
+        }
+    }
+}
+
 if (!function_exists('date_interval_to_seconds')) {
     function date_interval_to_seconds(DateInterval $interval): int
     {

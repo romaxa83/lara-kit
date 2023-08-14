@@ -99,6 +99,14 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'eyes' => [
+            'enable' => env('ENABLE_LOGGER_INFO', false),
+            // кол-во часов, для записи чтоб он считалась устаревшей и была удалена
+//            'hours_as_old' => env('RECS_HOURS_AS_OLD', 48),
+            'driver' => 'single',
+            'path' => storage_path('logs/info-laravel.log'),
+        ],
     ],
 
 ];

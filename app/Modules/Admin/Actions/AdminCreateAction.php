@@ -3,6 +3,7 @@
 namespace App\Modules\Admin\Actions;
 
 use App\Modules\Admin\Dto\AdminDto;
+use App\Modules\Admin\Events\AdminCreatedEvent;
 use App\Modules\Admin\Models\Admin;
 use App\Modules\Utils\Phones\PhoneService;
 
@@ -31,6 +32,8 @@ final class AdminCreateAction
             if($dto->phone){
                 $this->phoneService->create($model, $dto->phone, $verifyPhone);
             }
+
+            event(new AdminCreatedEvent($model, $dto));
 
             return $model;
         });
