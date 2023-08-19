@@ -12,8 +12,6 @@ declare(strict_types=1);
 // ]
 
 return [
-    App\GraphQL\Types\UploadType::class,
-
     App\GraphQL\Types\Enums\Messages\MessageKindEnumType::class,
     App\GraphQL\Types\Enums\Messages\AlertTargetEnumType::class,
 
@@ -63,6 +61,12 @@ return [
     // Translation input
     App\GraphQL\InputTypes\Localization\TranslationInput::class,
     App\GraphQL\InputTypes\Localization\TranslationDeleteInput::class,
+
+    // Media
+    App\GraphQL\Types\UploadType::class,
+    App\GraphQL\Types\Media\MediaConversionType::class,
+    App\GraphQL\Types\Media\MediaType::class,
+    App\GraphQL\Types\Enums\Avatars\AvatarModelsTypeEnum::class,
 
     App\GraphQL\Types\Unions\Authenticatable::class,
 

@@ -7,6 +7,8 @@ use App\GraphQL\Queries\BackOffice\Admins\AdminProfileQuery;
 use App\Modules\Admin\Models\Admin;
 use App\Modules\Permissions\Models\Role;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\Builders\Admins\AdminBuilder;
 use Tests\Builders\Permissions\PermissionBuilder;
 use Tests\Builders\Permissions\RoleBuilder;
@@ -84,7 +86,8 @@ class AdminProfileQueryTest extends TestCase
                                     'title' => $perm_1->translation->title
                                 ]
                             ]
-                        ]
+                        ],
+                        'avatar' => null
                     ]
                 ]
             ])
@@ -93,6 +96,46 @@ class AdminProfileQueryTest extends TestCase
             ->assertJsonCount(1, 'data.'.self::QUERY.'.permissions.0.translations')
             ->assertJsonCount(1, 'data.'.self::QUERY.'.permissions.1.translations')
             ->assertJsonCount(1, 'data.'.self::QUERY.'.permissions.2.translations')
+        ;
+    }
+
+    /** @test */
+    public function success_get_profile_with_avatar(): void
+    {
+       Storage::fake('public');
+
+        /** @var $model Admin */
+        $model = $this->adminBuilder->create();
+
+        $model->addMedia(
+            UploadedFile::fake()->image('avatar.png')
+        )
+            ->toMediaCollection(Admin::MEDIA_COLLECTION_NAME);
+
+        $this->loginAsAdmin($model);
+
+        $this->postGraphQLBackOffice([
+            'query' => $this->getQueryStr()
+        ])
+            ->assertJson([
+                'data' => [
+                    self::QUERY => [
+                        'id' => $model->id,
+                        'phone' => null,
+                        'phone_verified' => false,
+                        'role' => [
+                            'id' => $model->role->id,
+                        ],
+                        'permissions' => [],
+                        'avatar' => [
+                            'id' => $model->media[0]->id,
+                            'url' => $model->media[0]->getUrl(),
+                        ]
+                    ]
+                ]
+            ])
+            ->assertJsonCount(1, 'data.'.self::QUERY.'.roles')
+            ->assertJsonCount(0, 'data.'.self::QUERY.'.permissions')
         ;
     }
 
@@ -138,6 +181,10 @@ class AdminProfileQueryTest extends TestCase
                     language {
                         name
                         slug
+                    }
+                    avatar {
+                        id
+                        url
                     }
                 }
             }',

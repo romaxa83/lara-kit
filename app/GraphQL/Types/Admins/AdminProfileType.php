@@ -4,6 +4,7 @@ namespace App\GraphQL\Types\Admins;
 
 use App\GraphQL\Types\BaseType;
 use App\GraphQL\Types\Localization\LanguageType;
+use App\GraphQL\Types\Media\MediaType;
 use App\GraphQL\Types\NonNullType;
 use App\GraphQL\Types\Roles\PermissionType;
 use App\GraphQL\Types\Roles\RoleType;
@@ -59,6 +60,12 @@ class AdminProfileType extends BaseType
                     'type' => PermissionType::list(),
                     'is_relation' => false,
                 ],
+                'avatar' => [
+                    'type' => MediaType::type(),
+                    'is_relation' => false,
+                    'selectable' => false,
+                    'resolve' => static fn(Admin $a) => $a->avatar()
+                ]
             ]
         );
     }

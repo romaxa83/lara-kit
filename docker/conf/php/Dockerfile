@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
 	unzip \
 	libfreetype6-dev \
 	libjpeg62-turbo-dev \
+    libwebp-dev \
 	libpng-dev \
     libcurl4-openssl-dev \
     libpcre3-dev \
@@ -22,7 +23,7 @@ RUN apt-get update && apt-get install -y \
 	sox
 
 RUN docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql pgsql pdo_pgsql zip calendar opcache
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 RUN docker-php-ext-install -j$(nproc) gd
 
 RUN docker-php-ext-configure intl

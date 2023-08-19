@@ -21,8 +21,8 @@ help:  ## отображение данного сообщения help
 
 .PHONY: up
 up: docker_up info ## составная команда, для поднятия проекта [docker_up -> info]
-.PHONY: restart
-restart: down build up info ## составная команда, для перезапуска контейнера [down -> build -> up -> info]
+.PHONY: rebuild
+rebuild: down build up info ## составная команда, для пересборки контейнеров [down -> build -> up -> info]
 .PHONY: init
 init: down build docker_up app_init info ## составная команда, для первичного поднятия проекта, запускается один раз [down -> build -> docker_up -> app_init -> info]
 .PHONY: test

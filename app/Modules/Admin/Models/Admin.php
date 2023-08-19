@@ -9,6 +9,10 @@ use App\Modules\Admin\Filters\AdminFilter;
 use App\Modules\Localization\Contracts\Languageable;
 use App\Modules\Localization\Traits\HasLanguage;
 use App\Modules\Permissions\Enums\Guard;
+use App\Modules\Utils\Media\Contracts\HasAvatar;
+use App\Modules\Utils\Media\Contracts\HasMedia;
+use App\Modules\Utils\Media\Traits\InteractsWithAvatar;
+use App\Modules\Utils\Media\Traits\InteractsWithMedia;
 use App\Modules\Utils\Phones\Contracts\Phoneable;
 use App\Modules\Utils\Phones\Models\Phone;
 use App\Modules\Utils\Phones\Traits\HasPhone;
@@ -52,7 +56,9 @@ class Admin extends BaseAuthenticatable implements
     Languageable,
     ListPermission,
     Subscribable,
-    Phoneable
+    Phoneable,
+    HasMedia,
+    HasAvatar
 {
     use HasFactory;
     use Filterable;
@@ -63,9 +69,13 @@ class Admin extends BaseAuthenticatable implements
     use SetPasswordTrait;
     use DefaultListPermissionTrait;
     use SoftDeletes;
+    use InteractsWithMedia;
+    use InteractsWithAvatar;
 
     public const GUARD = Guard::ADMIN;
     public const MORPH_NAME = 'admin';
+
+    public const MEDIA_COLLECTION_NAME = 'avatar';
 
     public const TABLE = 'admins';
     protected $table = self::TABLE;
@@ -100,6 +110,18 @@ class Admin extends BaseAuthenticatable implements
     public function newCollection(array $models = []): AdminEloquentCollection
     {
         return AdminEloquentCollection::make($models);
+    }
+
+    public function getMediaCollectionName(): string
+    {
+        return self::MEDIA_COLLECTION_NAME;
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection($this->getMediaCollectionName())
+            ->singleFile()
+            ->acceptsMimeTypes($this->mimeImage());
     }
 
     public function getEmailVerificationCode(): ?string

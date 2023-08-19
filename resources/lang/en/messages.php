@@ -88,4 +88,13 @@ return [
             ],
         ],
     ],
+    'media' => [
+        'avatar' => [
+            'actions' => [
+                'delete' => [
+                    'success' => "Deleting avatar was successful."
+                ]
+            ]
+        ]
+    ]
 ];

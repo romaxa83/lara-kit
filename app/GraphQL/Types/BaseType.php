@@ -5,26 +5,14 @@ namespace App\GraphQL\Types;
 use App\Models\ListPermission;
 use Core\GraphQL\Fields\PermissionField;
 use Core\Traits\GraphQL\Types\BaseTypeTrait;
-use GraphQL\Type\Definition\NullableType;
-use Rebing\GraphQL\Support\Type;
 
-abstract class BaseType extends Type implements NullableType
+abstract class BaseType extends \Core\GraphQL\Types\BaseType
 {
     use BaseTypeTrait;
 
     public function fields(): array
     {
-        $fields = [
-            'id' => [
-                'type' => NonNullType::id(),
-            ],
-            'created_at' => [
-                'type' => NonNullType::string(),
-            ],
-            'updated_at' => [
-                'type' => NonNullType::string(),
-            ],
-        ];
+        $fields = parent::fields();
 
         if (
             ($attributes = $this->getAttributes())
@@ -37,3 +25,4 @@ abstract class BaseType extends Type implements NullableType
         return $fields;
     }
 }
+

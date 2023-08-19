@@ -105,6 +105,8 @@ return [
             App\GraphQL\Mutations\BackOffice\Admins\AdminUpdateMutation::class,
             App\GraphQL\Mutations\BackOffice\Admins\AdminDeleteMutation::class,
             App\GraphQL\Mutations\BackOffice\Admins\AdminChangePasswordMutation::class,
+            App\GraphQL\Mutations\BackOffice\Admins\Avatar\AvatarUploadMutation::class,
+            App\GraphQL\Mutations\BackOffice\Admins\Avatar\AvatarDeleteMutation::class,
 
             // User
             App\GraphQL\Mutations\BackOffice\Users\UserDeleteMutation::class,
