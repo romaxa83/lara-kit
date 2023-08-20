@@ -5,7 +5,7 @@ namespace App\Modules\Admin\Actions;
 use App\Modules\Admin\Dto\AdminDto;
 use App\Modules\Admin\Events\AdminCreatedEvent;
 use App\Modules\Admin\Models\Admin;
-use App\Modules\Utils\Phones\PhoneService;
+use App\Modules\Utils\Phones\Services\PhoneService;
 
 final class AdminCreateAction
 {

@@ -2,7 +2,7 @@
 
 return [
     'response' => [],
-
+//    ''
     'forgot_password' => [
         'send' => [
             'success' => "Password reset email sent to :email"
@@ -95,6 +95,11 @@ return [
                     'success' => "Deleting avatar was successful."
                 ]
             ]
+        ]
+    ],
+    'phone' => [
+        'sms' => [
+            'verify_code' => 'You code: :code'
         ]
     ]
 ];

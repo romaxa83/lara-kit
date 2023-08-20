@@ -29,7 +29,7 @@ class SendAdminCredentialsListener
             logger_info(LogKey::SEND_EMAIL."SendAdminCredentials to [{$event->getModel()->email->getValue()}] SUCCESS");
 
         } catch (\Throwable $e) {
-            logger_info( LogKey::SEND_EMAIL."SendAdminCredentials FAILED" . __CLASS__, [
+            logger_info( LogKey::SEND_EMAIL."SendAdminCredentials FAILED -" . __CLASS__, [
                 'message' => $e->getMessage()
             ]);
         }

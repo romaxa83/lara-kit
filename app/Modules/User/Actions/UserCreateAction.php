@@ -7,7 +7,7 @@ use App\Modules\Permissions\Models\Role;
 use App\Modules\Permissions\Repositories\RoleRepository;
 use App\Modules\User\Dto\UserDto;
 use App\Modules\User\Models\User;
-use App\Modules\Utils\Phones\PhoneService;
+use App\Modules\Utils\Phones\Services\PhoneService;
 
 final class UserCreateAction
 {

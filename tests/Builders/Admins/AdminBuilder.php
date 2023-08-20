@@ -6,7 +6,7 @@ use App\Modules\Admin\Models\Admin;
 use App\Modules\Localization\Models\Language;
 use App\Modules\Permissions\Models\Permission;
 use App\Modules\Permissions\Models\Role;
-use App\Modules\Utils\Phones\PhoneService;
+use App\Modules\Utils\Phones\Services\PhoneService;
 use App\Modules\Utils\Phones\ValueObject\Phone;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Hash;

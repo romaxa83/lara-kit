@@ -4,7 +4,7 @@ namespace App\Modules\User\Actions;
 
 use App\Modules\User\Dto\UserDto;
 use App\Modules\User\Models\User;
-use App\Modules\Utils\Phones\PhoneService;
+use App\Modules\Utils\Phones\Services\PhoneService;
 
 final class UserUpdateAction
 {

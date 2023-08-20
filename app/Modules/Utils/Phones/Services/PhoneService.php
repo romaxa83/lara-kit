@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Utils\Phones;
+namespace App\Modules\Utils\Phones\Services;
 
 use App\Modules\Utils\Phones\Contracts\Phoneable;
 use App\Modules\Utils\Phones\Models\Phone as PhoneModel;

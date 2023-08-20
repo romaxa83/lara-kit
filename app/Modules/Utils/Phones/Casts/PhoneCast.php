@@ -15,8 +15,9 @@ class PhoneCast implements CastsAttributes
 
     public function set($model, string $key, $value, array $attributes): string
     {
-        if (!$value instanceof Phone && !is_null($value)) {
-            throw new InvalidArgumentException(__('exceptions.value_not_phone_instance'));
+//        dd(!$value instanceof Phone, !is_null($value));
+        if (!$value instanceof Phone && is_null($value)) {
+            throw new InvalidArgumentException(__('exceptions.phone.value_not_phone_instance'));
         }
 
         return (string)$value;

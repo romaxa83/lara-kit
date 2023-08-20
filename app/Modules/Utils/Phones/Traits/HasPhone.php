@@ -43,7 +43,7 @@ trait HasPhone
 
     public function isPhoneVerified(): bool
     {
-        return $this?->phone?->phone_verified_at !== null;
+        return $this?->phone?->isVerify();
     }
 }
 

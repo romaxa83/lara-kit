@@ -40,6 +40,7 @@ class Phone extends BaseModel
     protected $casts = [
         'default' => 'boolean',
         'phone' => PhoneCast::class,
+        'code_expired_at' => 'datetime',
     ];
 
     protected static function newFactory(): Factory
@@ -50,5 +51,10 @@ class Phone extends BaseModel
     public function model(): MorphTo
     {
         return $this->morphTo('model');
+    }
+
+    public function isVerify(): bool
+    {
+        return $this->phone_verified_at !== null;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Builders;
 
+use App\Modules\Utils\Phones\Models\Phone;
 use Core\Models\BaseTranslation;
 use Faker\Generator;
 
@@ -60,6 +61,10 @@ abstract class BaseBuilder
 
     protected function save()
     {
+        if($this->modelClass() instanceof Phone){
+
+        dd($this->data, $this->modelClass());
+        }
         return $this->modelClass()::factory()->create($this->data);
     }
 

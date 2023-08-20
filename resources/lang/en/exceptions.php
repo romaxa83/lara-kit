@@ -17,5 +17,15 @@ return [
     'role' => [
         'not_found_user_role' => "User role not found",
         'not_cant_delete_role' => "The role cannot be deleted, it is bound to the user"
+    ],
+    'phone' => [
+        'value_not_phone_instance' => 'value is not valid phone object',
+        'not_found_phone' => 'Not found phone',
+        'verify' => [
+            'phone_already_verified' => 'Phone already verified',
+            'not_valid_code' => 'Phone already verified',
+            'code_has_expired' => 'Code has expired',
+            'code_is_not_correct' => 'Code is not correct'
+        ]
     ]
 ];

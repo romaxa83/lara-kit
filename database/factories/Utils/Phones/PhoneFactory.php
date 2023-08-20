@@ -17,7 +17,7 @@ class PhoneFactory extends Factory
 
     public function definition(): array
     {
-        $user = User::factory();
+        $user = User::factory()->create();
         return [
             'model_type' => $user::class,
             'model_id' => $user->id,
@@ -25,6 +25,7 @@ class PhoneFactory extends Factory
             'phone_verified_at' => null,
             'code' => null,
             'code_expired_at' => null,
+            'default' => true,
         ];
     }
 }
