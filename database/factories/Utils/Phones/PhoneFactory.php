@@ -4,7 +4,8 @@ namespace Database\Factories\Utils\Phones;
 
 use App\Modules\User\Models\User;
 use App\Modules\Utils\Phones\Models\Phone as PhoneModel;
-use App\ValueObjects\Phone;
+
+use App\Modules\Utils\Phones\ValueObject\Phone;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

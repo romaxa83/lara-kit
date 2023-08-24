@@ -2,7 +2,8 @@
 
 namespace App\Modules\Utils\Phones\Rules;
 
-use App\ValueObjects\Phone;
+
+use App\Modules\Utils\Phones\ValueObject\Phone;
 use Illuminate\Contracts\Validation\Rule;
 use Throwable;
 

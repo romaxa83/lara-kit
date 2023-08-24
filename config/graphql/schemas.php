@@ -62,6 +62,10 @@ return [
             App\GraphQL\Mutations\FrontOffice\Auth\ForgotPasswordMutation::class,
             App\GraphQL\Mutations\FrontOffice\Auth\ResetPasswordMutation::class,
 
+            // Verification phone
+            App\GraphQL\Mutations\FrontOffice\Verification\Phone\RequestMutation::class,
+            App\GraphQL\Mutations\FrontOffice\Verification\Phone\VerificationMutation::class,
+
             App\GraphQL\Mutations\FrontOffice\Users\UserEmailVerificationMutation::class,
             App\GraphQL\Mutations\FrontOffice\Users\UserResendVerificationMutation::class,
             App\GraphQL\Mutations\FrontOffice\Users\UserChangePasswordMutation::class,
@@ -121,6 +125,10 @@ return [
             App\GraphQL\Mutations\BackOffice\Permission\RoleUpdateMutation::class,
             App\GraphQL\Mutations\BackOffice\Permission\RoleDeleteMutation::class,
             App\GraphQL\Mutations\BackOffice\Permission\PermissionUpdateMutation::class,
+
+            // Verification phone
+            App\GraphQL\Mutations\BackOffice\Verification\Phone\RequestMutation::class,
+            App\GraphQL\Mutations\BackOffice\Verification\Phone\VerificationMutation::class,
 
         ],
         'subscription' => [

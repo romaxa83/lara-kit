@@ -26,7 +26,8 @@ final class VerificationService extends PhoneService
             config('sms.verify.sms_token_expired')
         );
         $model->save();
-//dd(event(new RequestVerifyEvent($model)));
+
+
         event(new RequestVerifyEvent($model));
 
         return Tokenizer::encryptToken([

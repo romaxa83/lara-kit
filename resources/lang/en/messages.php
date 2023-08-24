@@ -98,6 +98,7 @@ return [
         ]
     ],
     'phone' => [
+        'phone_verify_success' => 'Phone successfully verified',
         'sms' => [
             'verify_code' => 'You code: :code'
         ]

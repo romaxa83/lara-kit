@@ -17,14 +17,14 @@ class SendSmsListeners
      */
     public function handle(SmsSendable $event): void
     {
-        dd('d');
+//        dd($this->sender);
         try {
             $this->sender->send($event->getPhone(), $event->getMsg());
 
             logger_info(LogKey::SEND_SMS."Send to [{$event->getPhone()->getValue()}], with msg: \"{$event->getMsg()}\" SUCCESS");
 
         } catch (\Throwable $e) {
-
+//            dd($e);
             logger_info( LogKey::SEND_SMS."Send to [{$event->getPhone()->getValue()}], with msg: \"{$event->getMsg()}\" FAILED " . __CLASS__, [
                 'message' => $e->getMessage()
             ]);
