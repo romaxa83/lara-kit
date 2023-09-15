@@ -7,6 +7,7 @@ use App\Modules\Permissions\Models\Role;
 use App\Modules\Permissions\Repositories\RoleRepository;
 use App\Modules\User\Dto\UserDto;
 use App\Modules\User\Models\User;
+use App\Modules\Utils\Phones\Dto\PhoneDto;
 use App\Modules\Utils\Phones\Services\PhoneService;
 
 final class UserCreateAction
@@ -40,10 +41,14 @@ final class UserCreateAction
             $model->assignRole($role);
 
             if($dto->phone){
-                $this->phoneService->create($model, $dto->phone, $verifyPhone);
+                $this->phoneService->create($model, PhoneDto::byArgs([
+                    'phone' => $dto->phone,
+                    'default' => true,
+                    'verify' => $verifyPhone,
+                ]));
             }
 
-            return $model;
+            return $model->refresh();
         });
     }
 }

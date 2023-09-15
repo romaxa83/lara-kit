@@ -13,6 +13,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\Builders\Admins\AdminBuilder;
 use Tests\Builders\Localization\LanguageBuilder;
 use Tests\Builders\Permissions\RoleBuilder;
+use Tests\Builders\Utils\PhoneBuilder;
 use Tests\TestCase;
 
 class AdminUpdateActionTest extends TestCase
@@ -22,6 +23,7 @@ class AdminUpdateActionTest extends TestCase
     protected LanguageBuilder $langBuilder;
     protected RoleBuilder $roleBuilder;
     protected AdminBuilder $adminBuilder;
+    protected PhoneBuilder $phoneBuilder;
 
     protected array $data = [];
 
@@ -34,6 +36,7 @@ class AdminUpdateActionTest extends TestCase
         $this->langBuilder = resolve(LanguageBuilder::class);
         $this->roleBuilder = resolve(RoleBuilder::class);
         $this->adminBuilder = resolve(AdminBuilder::class);
+        $this->phoneBuilder = resolve(PhoneBuilder::class);
 
         $this->data = [
             'name' => 'admin',
@@ -195,6 +198,98 @@ class AdminUpdateActionTest extends TestCase
 
         $this->assertTrue($model->phone->phone->compare(new Phone($data['phone'])));
         $this->assertTrue($model->isPhoneVerified());
+    }
+
+    /** @test */
+    public function success_update_and_create_phones()
+    {
+        /** @var $model Admin */
+        $model = $this->adminBuilder->create();
+
+        $phone_1 = $this->phoneBuilder->model($model)
+            ->verify()
+            ->sort(1)
+            ->default()
+            ->desc('some desc')
+            ->create();
+        $phone_2 = $this->phoneBuilder->model($model)
+            ->default(false)
+            ->sort(2)
+            ->create();
+
+        $data = $this->data;
+        $data['role'] = $model->role->id;
+        unset($data['phone']);
+        $data['phones'] = [
+            [
+                'phone' => $phone_1->phone->asString(),
+                'default' => false,
+                'desc' => 'office'
+            ],
+            [
+                'phone' => $phone_2->phone->asString(),
+                'default' => false,
+                'desc' => 'office 2'
+            ],
+            [
+                'phone' => '380934444444',
+                'default' => true,
+                'desc' => null
+            ]
+        ];
+
+        $model->refresh();
+
+        $this->assertEquals($model->phone->phone->asString(), $phone_1->phone->asString());
+
+        $this->assertCount(2, $model->phones);
+
+        $this->assertEquals(
+            $model->phones[0]->phone->asString(),
+            $data['phones'][0]['phone']
+        );
+        $this->assertNotEquals(
+            $model->phones[0]->desc,
+            $data['phones'][0]['desc']
+        );
+
+        $this->assertEquals(
+            $model->phones[1]->phone->asString(),
+            $data['phones'][1]['phone']
+        );
+        $this->assertNotEquals(
+            $model->phones[1]->desc,
+            $data['phones'][1]['desc']
+        );
+
+        /** @var $handler AdminUpdateAction */
+        $handler = resolve(AdminUpdateAction::class);
+        $model = $handler->exec($model, AdminDto::byArgs($data));
+
+        $model->refresh();
+
+        $this->assertEquals($model->phone->phone->asString(), $data['phones'][2]['phone']);
+
+        $this->assertCount(3, $model->phones);
+
+//        dd($model->phones);
+
+        $this->assertEquals(
+            $model->phones[0]->desc,
+            $data['phones'][0]['desc']
+        );
+        $this->assertEquals(
+            $model->phones[1]->desc,
+            $data['phones'][1]['desc']
+        );
+        $this->assertEquals(
+            $model->phones[2]->desc,
+            $data['phones'][2]['desc']
+        );
+        $this->assertEquals(
+            $model->phones[2]->phone->asString(),
+            $data['phones'][2]['phone']
+        );
     }
 }
 

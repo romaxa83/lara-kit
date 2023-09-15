@@ -61,9 +61,9 @@ class AdminCreateMutation extends BaseMutation
             'input.name' => ['required', 'string', new NameRule()],
             'input.email' => ['required', 'string', 'email', Rule::unique(Admin::class, 'email')],
             'input.password' => ['required', 'string', new PasswordRule()],
-            'input.phone' => ['nullable', 'string', new PhoneRule(), new PhoneUniqueRule(Admin::class)],
             'input.role' => ['required', 'int', Rule::exists(Role::TABLE, 'id')],
-            'input.lang' => ['nullable', 'string', Rule::exists(Language::TABLE, 'slug')]
+            'input.lang' => ['nullable', 'string', Rule::exists(Language::TABLE, 'slug')],
+            'input.phone' => ['nullable', 'string', new PhoneRule(), new PhoneUniqueRule(Admin::class)],
         ];
     }
 }

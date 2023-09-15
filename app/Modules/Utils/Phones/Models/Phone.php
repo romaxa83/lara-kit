@@ -3,6 +3,7 @@
 namespace App\Modules\Utils\Phones\Models;
 
 use App\Modules\Utils\Phones\Casts\PhoneCast;
+use App\Modules\Utils\Phones\Collections\PhoneEloquentCollection;
 use App\Modules\Utils\Phones\ValueObject\Phone as PhoneObj;
 use Carbon\Carbon;
 use Core\Models\BaseModel;
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int code
  * @property null|Carbon code_expired_at
  * @property null|string desc
+ * @property int sort
  *
  * @method static PhoneFactory factory(...$parameters)
  */
@@ -37,6 +39,10 @@ class Phone extends BaseModel
 
     protected $hidden = [];
 
+    protected $fillable = [
+        'sort'
+    ];
+
     protected $casts = [
         'default' => 'boolean',
         'phone' => PhoneCast::class,
@@ -46,6 +52,11 @@ class Phone extends BaseModel
     protected static function newFactory(): Factory
     {
         return PhoneFactory::new();
+    }
+
+    public function newCollection(array $models = []): PhoneEloquentCollection
+    {
+        return PhoneEloquentCollection::make($models);
     }
 
     public function model(): MorphTo

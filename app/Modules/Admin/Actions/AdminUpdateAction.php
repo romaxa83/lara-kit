@@ -37,8 +37,12 @@ final class AdminUpdateAction
                 $model->syncRoles($dto->role);
             }
 
-            if($dto->phone){
-                $this->phoneService->createOrUpdate($model, $dto->phone, $verifyPhone);
+            if($dto->phoneDto){
+                $dto->phoneDto->verify = $verifyPhone;
+                $this->phoneService->createOrUpdate($model, $dto->phoneDto);
+            } elseif ($dto->phonesDto) {
+                $dto->phonesDto->verify = $verifyPhone;
+                $this->phoneService->createOrUpdates($model, $dto->phonesDto);
             }
 
             if ($model->isDirty()) {
@@ -49,4 +53,3 @@ final class AdminUpdateAction
         });
     }
 }
-

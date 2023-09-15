@@ -2,9 +2,9 @@
 
 namespace App\Modules\Utils\Phones\Traits;
 
+use App\Modules\Utils\Phones\Collections\PhoneEloquentCollection;
 use App\Modules\Utils\Phones\Models\Phone;
 use App\Modules\Utils\Phones\ValueObject\Phone as PhoneObj;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property-read null|Phone phone
  *
  * @see HasPhone::phones()
- * @property-read Collection|Phone[] phones
+ * @property-read PhoneEloquentCollection|Phone[] phones
  */
 trait HasPhone
 {
@@ -26,9 +26,10 @@ trait HasPhone
         return $this->id;
     }
 
-    public function phones(): MorphMany|Phone
+    public function phones(): MorphMany|PhoneEloquentCollection
     {
-        return $this->morphMany(Phone::class, 'model');
+        return $this->morphMany(Phone::class, 'model')
+            ->orderBy('sort');
     }
 
     public function getPhoneAttribute(): null|Phone
@@ -46,4 +47,3 @@ trait HasPhone
         return $this?->phone?->isVerify();
     }
 }
-

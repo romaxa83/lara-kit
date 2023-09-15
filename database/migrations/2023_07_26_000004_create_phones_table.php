@@ -19,6 +19,7 @@ return new class extends Migration {
                 $table->string('code', 10)->nullable();
                 $table->timestamp('code_expired_at')->nullable();
                 $table->string('desc', 1000)->nullable();
+                $table->integer('sort')->default(1);
 
                 $table->unique(['model_id', 'model_type', 'phone']);
             }

@@ -4,6 +4,7 @@ namespace App\Modules\User\Actions;
 
 use App\Modules\User\Dto\UserDto;
 use App\Modules\User\Models\User;
+use App\Modules\Utils\Phones\Dto\PhoneDto;
 use App\Modules\Utils\Phones\Services\PhoneService;
 
 final class UserUpdateAction
@@ -35,7 +36,11 @@ final class UserUpdateAction
             }
 
             if($dto->phone){
-                $this->phoneService->createOrUpdate($model, $dto->phone, $verifyPhone);
+                $this->phoneService->createOrUpdate($model, PhoneDto::byArgs([
+                    'phone' => $dto->phone,
+                    'default' => true,
+                    'verify' => $verifyPhone,
+                ]));
             }
 
             if ($model->isDirty()) {

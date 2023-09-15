@@ -21,6 +21,35 @@ class PhoneBuilder extends BaseBuilder
         return $this;
     }
 
+    public function default(bool $value = true): self
+    {
+        $this->data['default'] = $value;
+        return $this;
+    }
+
+    public function desc(string $value): self
+    {
+        $this->data['desc'] = $value;
+        return $this;
+    }
+
+    public function sort(int $value): self
+    {
+        $this->data['sort'] = $value;
+        return $this;
+    }
+
+    public function verify(bool $value = true): self
+    {
+        if($value){
+            $this->data['phone_verified_at'] = CarbonImmutable::now();
+        } else {
+            $this->data['phone_verified_at'] = null;
+        }
+
+        return $this;
+    }
+
     public function model(Model $model): self
     {
         $this->data['model_id'] = $model->id;

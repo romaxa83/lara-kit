@@ -21,6 +21,7 @@ return [
     'phone' => [
         'value_not_phone_instance' => 'value is not valid phone object',
         'not_found_phone' => 'Not found phone',
+        'duplicate_phone' => 'Trying to duplicate a phone',
         'verify' => [
             'phone_already_verified' => 'Phone already verified',
             'not_valid_code' => 'Phone already verified',

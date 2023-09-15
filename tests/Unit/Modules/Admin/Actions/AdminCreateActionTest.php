@@ -8,6 +8,7 @@ use App\Modules\Admin\Events\AdminCreatedEvent;
 use App\Modules\Admin\Listeners\SendAdminCredentialsListener;
 use App\Modules\Admin\Models\Admin;
 use App\Modules\Permissions\Models\Role;
+use App\Modules\Utils\Phones\Exceptions\PhoneServiceException;
 use App\Modules\Utils\Phones\Models\Phone;
 use App\Modules\Utils\Phones\ValueObject\Phone as PhoneObj;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -42,6 +43,8 @@ class AdminCreateActionTest extends TestCase
             'password' => 'password',
             'phone' => '+38(095)451-49-49',
         ];
+
+        $this->langInit();
     }
 
     /** @test */
@@ -148,5 +151,121 @@ class AdminCreateActionTest extends TestCase
 
         $this->assertCount(0, $model->phones);
         $this->assertNull($model->phone);
+    }
+
+    /** @test */
+    public function success_create_many_phone()
+    {
+        Event::fake([AdminCreatedEvent::class]);
+
+        /** @var $role Role */
+        $role = $this->roleBuilder->create();
+
+        $data = $this->data;
+        $data['role'] = $role;
+        unset($data['phone']);
+        $data['phones'] = [
+            [
+                'phone' => '380954444444',
+                'default' => true,
+                'desc' => 'some desc phone 1'
+            ],
+            [
+                'phone' => '380954444445',
+                'default' => false,
+                'desc' => 'some desc phone 2'
+            ]
+        ];
+
+        $this->assertFalse(Admin::query()->where('email', $data['email'])->exists());
+
+        /** @var $handler AdminCreateAction */
+        $handler = resolve(AdminCreateAction::class);
+        $model = $handler->exec(AdminDto::byArgs($data));
+
+        foreach ($data['phones'] as $item){
+            /** @var $p Phone */
+            $p = $model->phones->where('phone', $item['phone'])->first();
+            $this->assertEquals($p->default, $item['default']);
+            $this->assertEquals($p->desc, $item['desc']);
+            $this->assertFalse($p->isVerify());
+        }
+
+        $this->assertEquals($model->phone->phone->asString(), $data['phones'][0]['phone']);
+    }
+
+    /** @test */
+    public function success_create_many_phone_as_verify()
+    {
+        Event::fake([AdminCreatedEvent::class]);
+
+        /** @var $role Role */
+        $role = $this->roleBuilder->create();
+
+        $data = $this->data;
+        $data['role'] = $role;
+        unset($data['phone']);
+        $data['phones'] = [
+            [
+                'phone' => '380954444444',
+                'default' => false,
+                'desc' => 'some desc phone 1'
+            ],
+            [
+                'phone' => '380954444445',
+                'default' => false,
+                'desc' => null
+            ]
+        ];
+
+        $this->assertFalse(Admin::query()->where('email', $data['email'])->exists());
+
+        /** @var $handler AdminCreateAction */
+        $handler = resolve(AdminCreateAction::class);
+        $model = $handler->exec(AdminDto::byArgs($data), true);
+
+        foreach ($data['phones'] as $item){
+            /** @var $p Phone */
+            $p = $model->phones->where('phone', $item['phone'])->first();
+            $this->assertEquals($p->default, $item['default']);
+            $this->assertEquals($p->desc, $item['desc']);
+            $this->assertTrue($p->isVerify());
+        }
+
+        $this->assertNull($model->phone);
+    }
+
+    /** @test */
+    public function fail_create_many_phone_duplicate()
+    {
+        Event::fake([AdminCreatedEvent::class]);
+
+        /** @var $role Role */
+        $role = $this->roleBuilder->create();
+
+        $data = $this->data;
+        $data['role'] = $role;
+        unset($data['phone']);
+        $data['phones'] = [
+            [
+                'phone' => '380954444444',
+                'default' => false,
+                'desc' => 'some desc phone 1',
+            ],
+            [
+                'phone' => '380954444444',
+                'default' => false,
+                'desc' => null
+            ]
+        ];
+
+        $this->assertFalse(Admin::query()->where('email', $data['email'])->exists());
+
+        $this->expectException(PhoneServiceException::class);
+        $this->expectExceptionMessage(__("exceptions.phone.duplicate_phone"));
+
+        /** @var $handler AdminCreateAction */
+        $handler = resolve(AdminCreateAction::class);
+        $handler->exec(AdminDto::byArgs($data), true);
     }
 }

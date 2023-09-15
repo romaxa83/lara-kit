@@ -5,6 +5,7 @@ namespace App\Modules\Admin\Actions;
 use App\Modules\Admin\Dto\AdminDto;
 use App\Modules\Admin\Events\AdminCreatedEvent;
 use App\Modules\Admin\Models\Admin;
+use App\Modules\Utils\Phones\Dto\PhoneDto;
 use App\Modules\Utils\Phones\Services\PhoneService;
 
 final class AdminCreateAction
@@ -17,6 +18,7 @@ final class AdminCreateAction
         bool $verifyPhone = false
     ): Admin
     {
+
         return make_transaction(function() use ($dto, $verifyPhone) {
 
             $model = new Admin();
@@ -29,13 +31,17 @@ final class AdminCreateAction
 
             $model->assignRole($dto->role);
 
-            if($dto->phone){
-                $this->phoneService->create($model, $dto->phone, $verifyPhone);
+            if($dto->phoneDto){
+                $dto->phoneDto->verify = $verifyPhone;
+                $this->phoneService->create($model, $dto->phoneDto);
+            } elseif ($dto->phonesDto) {
+                $dto->phonesDto->verify = $verifyPhone;
+                $this->phoneService->creates($model, $dto->phonesDto);
             }
 
             event(new AdminCreatedEvent($model, $dto));
 
-            return $model;
+            return $model->refresh();
         });
     }
 }

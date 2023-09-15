@@ -27,6 +27,7 @@ class PhoneFactory extends Factory
             'code' => null,
             'code_expired_at' => null,
             'default' => true,
+            'sort' => true,
         ];
     }
 }
